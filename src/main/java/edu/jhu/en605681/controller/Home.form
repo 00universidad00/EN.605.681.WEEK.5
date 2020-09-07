@@ -213,11 +213,11 @@
                       </component>
                       <component id="c759f" class="javax.swing.JLabel">
                         <constraints>
-                          <grid row="1" column="6" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <grid row="1" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <font name="Helvetica"/>
-                          <text value="Price"/>
+                          <text value="Sub total"/>
                         </properties>
                       </component>
                       <component id="391b5" class="javax.swing.JLabel" binding="weekendFeeLabel">
@@ -289,11 +289,11 @@
                       </component>
                       <component id="43e23" class="javax.swing.JLabel">
                         <constraints>
-                          <grid row="4" column="6" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <grid row="4" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <font name="Helvetica"/>
-                          <text value="Price"/>
+                          <text value="Sub total"/>
                         </properties>
                       </component>
                       <component id="68969" class="javax.swing.JLabel" binding="totalPriceLabel">

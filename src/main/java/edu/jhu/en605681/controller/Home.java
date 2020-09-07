@@ -1,6 +1,8 @@
 package main.java.edu.jhu.en605681.controller;
 
+import javafx.util.Pair;
 import main.java.edu.jhu.en605681.model.Hike;
+import main.java.edu.jhu.en605681.network.Client;
 import main.java.edu.jhu.en605681.utils.BookingDay;
 import main.java.edu.jhu.en605681.utils.Rates;
 import org.jdatepicker.DateLabelFormatter;
@@ -104,31 +106,37 @@ public class Home {
         } else {
             // get selected hike
             Hike selectedHike = (Hike) destination.getSelectedItem();
-            // pass hike and date to Booking & Rates class
-            Rates rates = new Rates(Rates.HIKE.valueOf(Objects.requireNonNull(selectedHike).toString()));
-            // format date
+            // get hike id
+            int hikeId = Objects.requireNonNull(selectedHike).id();
+            // get date information
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(selectedDate);
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH) + 1;
             int day = calendar.get(Calendar.DAY_OF_MONTH);
+            // get selected tour length
+            int selectedLength = (Integer) (Objects.requireNonNull(days.getSelectedItem()));
+            // call client instance and pass parameters, save results in Pair object
+            Pair<String, Double> serverResponse = Client.getInstance().getPrice(hikeId, year, month, day, selectedLength);
+            // pass values to Rates class (Only used to calculate details about the selected dates)
+            Rates rates = new Rates(Rates.HIKE.valueOf(Objects.requireNonNull(selectedHike).toString()));
             // pass date to rates class
             rates.setBeginDate(new BookingDay(year, month, day));
-            // get selected tour length
-            Integer selectedLength = (Integer) days.getSelectedItem();
-            rates.setDuration(Objects.requireNonNull(selectedLength));
-            // check rates are valid
-            if (rates.isValidDates()) {
+            // pass tour duration
+            rates.setDuration(selectedLength);
+            // validate server response
+            if(serverResponse.getValue() > 0){
                 // update price labels
                 updateLabels(Objects.requireNonNull(selectedHike).price(),
                         rates.getNormalDays(),
                         rates.getPremiumDays(),
-                        rates.getCost());
+                        // get price form server
+                        serverResponse.getValue());
             } else {
                 // clear values in ui
                 clearLabels();
-                // notify the user about incorrect date
-                displayErrorPopup(rates.getDetails());
+                // notify the user about incorrect date using response form server
+                displayErrorPopup(serverResponse.getKey());
             }
         }
     }
