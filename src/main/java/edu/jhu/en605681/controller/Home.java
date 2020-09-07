@@ -130,8 +130,6 @@ public class Home {
                 // notify the user about incorrect date
                 displayErrorPopup(rates.getDetails());
             }
-
-
         }
     }
 

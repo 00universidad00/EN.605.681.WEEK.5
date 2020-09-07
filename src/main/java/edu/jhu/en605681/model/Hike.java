@@ -2,11 +2,15 @@ package main.java.edu.jhu.en605681.model;
 
 /**
  * Public ENUM used to store the hikes
+ *
  * @author Eleazar Miranda
  */
 public enum Hike {
     GARDINER {
-        @Override
+        public int id() {
+            return 0;
+        }
+
         public String location() {
             return "Gardiner Lake";
         }
@@ -24,7 +28,10 @@ public enum Hike {
         }
     },
     HELLROARING {
-        @Override
+        public int id() {
+            return 1;
+        }
+
         public String location() {
             return "Hellroaring Plateau";
         }
@@ -42,7 +49,10 @@ public enum Hike {
         }
     },
     BEATEN {
-        @Override
+        public int id() {
+            return 2;
+        }
+
         public String location() {
             return "The Beaten Path";
         }
@@ -59,6 +69,8 @@ public enum Hike {
             return 45;
         }
     };
+
+    public abstract int id();
 
     public abstract String location();
 
