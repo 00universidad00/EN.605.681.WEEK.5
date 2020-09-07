@@ -15,7 +15,7 @@ public class Main {
         }
         // initialize frame and mount root panel
         JFrame frame = new JFrame("Hello");
-        frame.setContentPane(new Home().rootPanel);
+        frame.setContentPane(new Home().topPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);

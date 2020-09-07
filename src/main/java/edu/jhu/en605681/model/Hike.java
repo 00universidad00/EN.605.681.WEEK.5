@@ -1,5 +1,9 @@
 package main.java.edu.jhu.en605681.model;
 
+/**
+ * Public ENUM used to store the hikes
+ * @author Eleazar Miranda
+ */
 public enum Hike {
     GARDINER {
         @Override

@@ -13,8 +13,13 @@ import java.awt.*;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
+/**
+ * @author Eleazar Miranda
+ */
 public class Home {
-    public JPanel rootPanel;
+    // class members
+    public JScrollPane topPanel;
+    private JPanel rootPanel;
     private JComboBox<Hike> destination;
     private JComboBox<Integer> days;
     private JButton calculatePrice;
@@ -30,6 +35,9 @@ public class Home {
     private JLabel icon;
     private JDatePickerImpl datePicker;
 
+    /**
+     * Public constructor
+     */
     public Home() {
         // initialize ui components
         initUiComponents();
@@ -37,6 +45,9 @@ public class Home {
         registerListeners();
     }
 
+    /**
+     * Method used to set up the initial models and data for the UI
+     */
     private void initUiComponents() {
         ImageIcon originalIcon = new ImageIcon(getClass().getResource("/edu/jhu/en605681/assets/logo.png"));
         int width = 60;
@@ -66,6 +77,9 @@ public class Home {
         days.setModel(new DefaultComboBoxModel<>(Objects.requireNonNull(selectedHike).length()));
     }
 
+    /**
+     * Method used to register elements that accept actions form users
+     */
     private void registerListeners() {
         destination.addActionListener(e -> {
             // update days combo box each time destination changes
@@ -75,6 +89,9 @@ public class Home {
         calculatePrice.addActionListener(e -> calculatePrice());
     }
 
+    /**
+     * Method used to calculate the price of the tours
+     */
     private void calculatePrice() {
         // Get selected date
         Date selectedDate = (Date) datePicker.getModel().getValue();
@@ -100,21 +117,39 @@ public class Home {
             // get selected tour length
             Integer selectedLength = (Integer) days.getSelectedItem();
             rates.setDuration(Objects.requireNonNull(selectedLength));
-            // update price labels
-            updateLabels(Objects.requireNonNull(selectedHike).price(),
-                    rates.getNormalDays(),
-                    rates.getPremiumDays(),
-                    rates.getCost());
+            // check rates are valid
+            if (rates.isValidDates()) {
+                // update price labels
+                updateLabels(Objects.requireNonNull(selectedHike).price(),
+                        rates.getNormalDays(),
+                        rates.getPremiumDays(),
+                        rates.getCost());
+            } else {
+                // clear values in ui
+                clearLabels();
+                // notify the user about incorrect date
+                displayErrorPopup(rates.getDetails());
+            }
+
+
         }
     }
 
-    private void displayErrorPopup(String message) {
+    /**
+     * Method used to present a popup to the user (Alerts the date is incorrect)
+     *
+     * @param details error message
+     */
+    private void displayErrorPopup(String details) {
         JOptionPane.showMessageDialog(rootPanel,
-                message,
+                details,
                 "Date Error",
                 JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * Method used to reset the information displayed in the UI
+     */
     private void clearLabels() {
         weekDaysLabel.setText("0");
         weekRateLabel.setText("$0");
@@ -126,6 +161,14 @@ public class Home {
         totalPriceLabel.setText("$0");
     }
 
+    /**
+     * Method used to update information in the UI
+     *
+     * @param hikeRate    the price of a particular hike
+     * @param weekDays    tour days that fall in a week day
+     * @param weekendDays tour days that fall in a weekend
+     * @param grandTotal  total of the tour
+     */
     private void updateLabels(double hikeRate,
                               int weekDays,
                               int weekendDays,
@@ -153,6 +196,21 @@ public class Home {
         totalPriceLabel.setText("$" + grandTotal);
     }
 
+    /**
+     * Method used to resize images
+     *
+     * @param image image to be resized
+     * @param w     width
+     * @param h     height
+     * @return resized image
+     */
+    private Image scaleImage(Image image, int w, int h) {
+        return image.getScaledInstance(w, h, Image.SCALE_SMOOTH);
+    }
+
+    /**
+     * Helper method used to display the name of a hike in a combo box
+     */
     public static class MyObjectListCellRenderer extends DefaultListCellRenderer {
         public Component getListCellRendererComponent(
                 JList list,
@@ -166,10 +224,5 @@ public class Home {
             super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             return this;
         }
-    }
-
-    private Image scaleImage(Image image, int w, int h) {
-        Image scaled = image.getScaledInstance(w, h, Image.SCALE_SMOOTH);
-        return scaled;
     }
 }
